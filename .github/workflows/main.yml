@@ -18,9 +18,20 @@ jobs:
 
       - name: Build Arch Linux Package(s)
         run: |
-          cat /etc/pacman.conf
-
           pacman-key --init
-          pacman -Syu --noconfirm
+          pacman -Syu git --noconfirm
 
+          echo Workspace: $GITHUB_WORKSPACE
           ls -lha $GITHUB_WORKSPACE
+
+          useradd -m -G wheel -s /bin/bash build
+          echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/00_wheel
+
+          cd /home/build
+          sudo -u build git clone https://aur.archlinux.org/aurutils
+          cd aurutils
+          sudo -u build makepkg -si --noconfirm
+          cd ..
+
+          cd $GITHUB_WORKSPACE
+          ./build.sh
