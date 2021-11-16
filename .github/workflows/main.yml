@@ -13,3 +13,5 @@ jobs:
 
       - name: Validate package
         uses: datakrama/archlinux-package-action@v1
+        with:
+          path: '**/PKGBUILD'
