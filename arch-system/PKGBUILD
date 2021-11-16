@@ -1,0 +1,74 @@
+# Maintainer: Tharre <tharre3@gmail.com>
+
+pkgbase=arch-system
+pkgname=('base-system' 'backup-system' 'xps13')
+pkgver=$(printf '%(%Y.%m.%d)T')
+pkgrel=1
+pkgdesc="Arch Linux system configuration"
+arch=("any")
+url=""
+license=('custom')
+source=('base-system.install' 'etc-pacman.conf' 'etc-locale.conf'
+        'etc-locale.gen' 'etc-vconsole.conf' 'mirrorupgrade.hook'
+        'sudoers-wheel' 'etc-nsswitch.conf' 'etc-sysctl.conf'
+        '90-modprobe-d.hook' 'etc-yubikey.rules'
+
+        'sudoers-borgbackup' 'backup-sudo' 'borg-backup.service'
+        'borg-backup.timer' 'borgbackup'
+
+        'xps13-i915.conf')
+sha256sums=('bb00c42f2802c12536c46700b948d41a43153d97a6986827b7c61203880e1ad1'
+            'b3b540ac0dd68831d813e34dd8465cd00e8ba6a56fa6e5a162dc5ef469ec584c'
+            '70b74b741f3b1b58eeb97d8d5b9e6148a35ff8dced47cf4a231c1d0420aff5eb'
+            '61359bca48f246bc90d90204ad894bfc22665d789b130fc838e9926dc47ab3a3'
+            '978271534da06356159eb24c0cee32b0024029d41df836ab76a964dfd7d36447'
+            '79ba5fdf0c69686ea0f2770c9b49b58ca26ebcce15e346d5bd56a442e684896e'
+            '62c1a085f7a9d1c5d57b40516fea5d7e8dfb3593d5c0a713cd571c8e5bae2584'
+            '9c1648e1e9219efbe1e4098952f7595f1ebb0eca629d2c8957079186c56d1822'
+            '67b6ebe8a8e52cd60266f418b7af77c2ef0b2b6596de494ec5c37824f355a3ae'
+            '7467bb40e7d404ed249b34a0e410b8d452ebc4b90588d7e210bfa47011b5981d'
+            'dd84877b7f6f4330da489fa33f843c9a7c862562a3d78dc2feea5116ac846a79'
+            '483a7d9350653c2cf22f36f67f1a83cc5c95232dfc10642a20d76e3c32c9e2e3'
+            'ea50cd57140fc3a27c027de7c289f058c23c840cc9ce65593969e8e2dd5b8e65'
+            '42050ba722df1cd606288e82054e131dac99bf10506f4c8d52eb9bfc0a078d89'
+            'e1bf3dc5978a7641f86975b7ee770a6914b30a8e4b7e3be2f1b07eaa7098591d'
+            '576ea8f97e757d6d9b7f7a02e65d0b1999ec2b9b29bd20eca5515d9d3843edb1'
+            '5613c98d32e513a973e8a0e250ab0b267882a73615f507b6208d4a5f21487fe6')
+
+package_base-system() {
+    depends=('gvim' 'zsh' 'tmux' 'htop' 'git' 'reflector' 'sudo' 'avahi'
+             'nss-mdns' 'ttf-dejavu' 'chromium' 'ttf-liberation')
+
+    install -Dm0644 etc-pacman.conf "$pkgdir"/etc/pacman.conf
+    install -Dm0644 etc-locale.conf "$pkgdir"/etc/locale.conf
+    install -Dm0644 etc-locale.gen "$pkgdir"/etc/locale.gen
+    install -Dm0644 etc-vconsole.conf "$pkgdir"/etc/vconsole.conf
+    install -Dm0644 mirrorupgrade.hook -t "$pkgdir"/etc/pacman.d/hooks
+    install -dm0750 "$pkgdir"/etc/sudoers.d/
+    install -Dm0644 sudoers-wheel "$pkgdir"/etc/sudoers.d/00_wheel
+    install -Dm0644 etc-nsswitch.conf "$pkgdir"/etc/nsswitch.conf
+    install -Dm0644 etc-sysctl.conf "$pkgdir"/usr/lib/sysctl.d/99-sysctl.conf
+    install -Dm0644 90-modprobe-d.hook -t "$pkgdir"/usr/share/libalpm/hooks/
+    install -Dm0644 etc-yubikey.rules -t "$pkgdir"/usr/lib/udev/rules.d
+
+    ln -s /usr/share/zoneinfo/Europe/Berlin "$pkgdir"/etc/localtime
+}
+
+package_backup-system() {
+    depends=('libnotify')
+
+    install -dm0750 "$pkgdir"/etc/sudoers.d/
+    install -Dm0644 sudoers-borgbackup "$pkgdir"/etc/sudoers.d/70_borgbackup
+    install -Dm0644 borg-backup.service -t "$pkgdir"/usr/lib/systemd/user/
+    install -Dm0644 borg-backup.timer -t "$pkgdir"/usr/lib/systemd/user/
+    install -Dm0755 borgbackup backup-sudo -t "$pkgdir"/usr/bin/
+}
+
+package_xps13() {
+    depends=('mesa' 'lib32-mesa' 'vulkan-intel' 'libva-intel-driver'
+             'lib32-libva-intel-driver' 'libvdpau-va-gl')
+
+    install -Dm0644 xps13-i915.conf "$pkgdir"/etc/modprobe.d/i915.conf
+}
+
+# TODO: docker, vagrant, devtools

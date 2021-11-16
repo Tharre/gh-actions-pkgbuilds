@@ -1,0 +1,95 @@
+#!/bin/bash
+
+set -o errexit -o errtrace
+
+BORG_HOST="12390@ch-s012.rsync.net"
+export BORG_REPO="$BORG_HOST:repos/$(hostname)"
+export BORG_PASSPHRASE="$(< ~/.borg_secret)"
+export BORG_RSH="ssh -o IdentitiesOnly=yes -o ConnectionAttempts=20 \
+                     -o ServerAliveInterval=30 -i ~/.ssh/borg_key"
+export LC_COLLATE=C
+
+SNAPSHOT_TARGET="/.snapshots/home-$(date "+%Y-%m-%dT%H:%M:%S")"
+
+cleanup() {
+    cd /
+    sudo -n /usr/bin/backup-sudo cleanup
+}
+
+notify_user() {
+    if ! [ -t 1 ]; then
+        notify-send "$@"
+    fi
+}
+
+handle_failure() {
+    notify_user -u critical "Backup failed!"
+
+    echo "Backup failed!" >&2
+    cleanup
+    exit 2
+}
+
+trap cleanup EXIT
+trap handle_failure INT TERM ERR
+
+cleanup
+
+backup() {
+    # borg's caching of 'known' files is really dumb - it takes the full
+    # canonical path to check if it has already seen a file. This means that the
+    # path of files must never change if you want fast backups.
+    # As symlinks won't work, we use mount(8) to ensure the paths stay the same.
+    sudo -n backup-sudo mount "$1"
+
+    if [ -t 1 ]; then
+        borg_progress="--progress"
+    fi
+
+    cd /backup
+    borg create --stats $borg_progress \
+                --exclude-from ~/.borg_exclude \
+                --timestamp . \
+                --show-rc \
+                ::"$(basename "$1")" . && rc=$? || rc=$?
+    if [ $rc -eq 1 ]; then
+        # borg defines return code 1 as warning, usually permission stuff
+        notify_user "Warning: borgbackup returned 1. Check logs"
+    elif [ $rc -gt 1 ]; then
+        handle_failure
+    fi
+
+    cleanup
+    sudo -n backup-sudo delete_snapshot "$1"
+}
+
+if [ ! -d "$SNAPSHOT_TARGET" ]; then
+    sudo -n backup-sudo snapshot "$SNAPSHOT_TARGET"
+fi
+
+$BORG_RSH "$BORG_HOST" -f -N || rc=$?
+if [ ${rc-0} -eq 255 ]; then
+    notify_user "Backup: upload skipped"
+    echo "SSH server not reachable, skipping upload" >&2
+    exit 0
+elif [ ${rc-0} -ne 0 ]; then
+    handle_failure
+fi
+
+# break locks in case the previous run was interrupted
+borg break-lock
+
+for d in /.snapshots/*/ ; do
+    echo "Now working on: $d"
+    backup "$d"
+done
+
+echo "Pruning repository."
+
+borg prune --show-rc --list \
+           --keep-hourly 72 \
+           --keep-daily   7 \
+           --keep-weekly  4 \
+           --keep-monthly 6
+
+echo "Backup finished."
