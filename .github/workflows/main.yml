@@ -7,11 +7,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
+      options: --privileged
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Validate package
-        uses: datakrama/archlinux-package-action@v1
-        with:
-          path: '**/PKGBUILD'
+      - name: Build Arch Linux Package(s)
+        run: echo Hello World
