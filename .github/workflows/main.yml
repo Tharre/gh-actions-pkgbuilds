@@ -34,4 +34,4 @@ jobs:
           cd ..
 
           cd $GITHUB_WORKSPACE
-          ./build.sh
+          ./new_build.sh
