@@ -19,7 +19,7 @@ jobs:
       - name: Build Arch Linux Package(s)
         run: |
           pacman-key --init
-          pacman -Syu git --noconfirm
+          pacman -Syu git expac --noconfirm
 
           echo Workspace: $GITHUB_WORKSPACE
           ls -lha $GITHUB_WORKSPACE
@@ -34,4 +34,4 @@ jobs:
           cd ..
 
           cd $GITHUB_WORKSPACE
-          ./new_build.sh
+          sudo -u build ./new_build.sh
