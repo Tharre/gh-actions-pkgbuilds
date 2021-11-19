@@ -24,9 +24,6 @@ jobs:
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
 
-          echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen
-          locale-gen
-
           echo Workspace: $GITHUB_WORKSPACE
           ls -lha $GITHUB_WORKSPACE
 
