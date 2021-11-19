@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+CHROOT=$HOME/chroot
+
 for dir in $(aur graph */.SRCINFO | tsort | tac); do
 	echo testing "$dir"
 

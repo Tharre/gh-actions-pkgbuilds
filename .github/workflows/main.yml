@@ -41,7 +41,7 @@ jobs:
           sed -i "s/en_US de_DE/en_US/g" /usr/bin/mkarchroot
           cat /usr/bin/mkarchroot
 
-          export CHROOT=$HOME/chroot
+          CHROOT=$HOME/chroot
           mkdir $CHROOT
           mkarchroot $CHROOT/root base-devel
 
