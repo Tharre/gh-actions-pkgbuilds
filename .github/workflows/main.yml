@@ -15,15 +15,17 @@ jobs:
     steps:
       - name: Prepare environment
         run: |
-          cat << EOF >> /etc/pacman.conf
-          [custom]
-          SigLevel = Optional TrustAll
-          Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
-          EOF
+          # cat << EOF >> /etc/pacman.conf
+          # [custom]
+          # SigLevel = Optional TrustAll
+          # Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
+          # EOF
 
           pacman-key --init
-          pacman -Syu base base-devel git expac devtools --noconfirm
-          pacman -Qqn | pacman -S --noconfirm -
+          pacman -Syu git expac devtools --noconfirm
+
+          echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen
+          locale-gen
 
           echo Workspace: $GITHUB_WORKSPACE
           ls -lha $GITHUB_WORKSPACE
