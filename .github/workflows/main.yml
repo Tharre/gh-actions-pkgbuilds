@@ -21,9 +21,6 @@ jobs:
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
           EOF
 
-          echo "Machine ID:"
-          cat /etc/machine-id
-
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
 
