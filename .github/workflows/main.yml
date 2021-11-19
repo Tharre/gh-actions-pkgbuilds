@@ -40,7 +40,7 @@ jobs:
 
           sed -i "s/en_US de_DE/en_US/g" /usr/bin/mkarchroot
 
-          CHROOT=$HOME/chroot
+          CHROOT=/buildchroot
           mkdir $CHROOT
           mkarchroot $CHROOT/root base-devel
 

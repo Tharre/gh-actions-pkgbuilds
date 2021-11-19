@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-CHROOT=/github/home/chroot
+CHROOT=/buildchroot
 # CHROOT=$HOME/chroot
 # mkdir $CHROOT
 # mkarchroot $CHROOT/root base-devel
