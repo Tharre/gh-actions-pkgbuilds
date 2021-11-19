@@ -36,6 +36,7 @@ jobs:
           sudo -u build makepkg -si --noconfirm
           cd ..
 
+          locale-gen
           dbus-uuidgen --ensure=/etc/machine-id
 
           CHROOT=$HOME/chroot
