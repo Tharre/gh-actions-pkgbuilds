@@ -33,5 +33,8 @@ jobs:
           sudo -u build makepkg -si --noconfirm
           cd ..
 
+          curl -LO https://github.com/$GITHUB_REPOSITORY/releases/download/repository/custom.db
+          curl -LO https://github.com/$GITHUB_REPOSITORY/releases/download/repository/custom.files
+
           cd $GITHUB_WORKSPACE
           sudo -u build ./new_build.sh
