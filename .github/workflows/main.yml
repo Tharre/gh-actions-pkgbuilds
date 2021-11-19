@@ -33,7 +33,8 @@ jobs:
           cd /home/build
           sudo -u build git clone https://aur.archlinux.org/aurutils
           cd aurutils
-          sudo -u build makepkg -si --noconfirm
+          #sudo -u build makepkg -si --noconfirm
+          extra-x86_64-build
           cd ..
 
           CHROOT=$HOME/chroot
