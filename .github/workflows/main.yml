@@ -40,7 +40,10 @@ jobs:
 
           sed -i "s/en_US de_DE/en_US/g" /usr/bin/mkarchroot
 
-          chown build:build $HOME
+          echo chown -R build:build $HOME
+          chown -R build:build $HOME
+          echo chown -R build:build $GITHUB_WORKSPACE
+          chown -R build:build $GITHUB_WORKSPACE
 
           CHROOT=$HOME/chroot
           mkdir $CHROOT
