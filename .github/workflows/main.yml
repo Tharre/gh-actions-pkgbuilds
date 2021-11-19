@@ -40,11 +40,6 @@ jobs:
 
           sed -i "s/en_US de_DE/en_US/g" /usr/bin/mkarchroot
 
-          echo chown -R build:build $HOME
-          chown -R build:build $HOME
-          echo chown -R build:build $GITHUB_WORKSPACE
-          chown -R build:build $GITHUB_WORKSPACE
-
           CHROOT=$HOME/chroot
           mkdir $CHROOT
           mkarchroot $CHROOT/root base-devel
@@ -61,5 +56,9 @@ jobs:
 
       - name: Build Arch Linux Package(s)
         run: |
+          echo chown -R build:build $HOME
+          chown -R build:build $HOME
+          echo chown -R build:build $GITHUB_WORKSPACE
+          chown -R build:build $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
           sudo -u build ./new_build.sh
