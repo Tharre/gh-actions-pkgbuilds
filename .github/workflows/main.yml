@@ -13,9 +13,6 @@ jobs:
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Prepare environment
         run: |
           cat << EOF >> /etc/pacman.conf
@@ -23,6 +20,9 @@ jobs:
           SigLevel = Optional TrustAll
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
           EOF
+
+          echo "Machine ID:"
+          cat /etc/machine-id
 
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
@@ -42,6 +42,9 @@ jobs:
           CHROOT=$HOME/chroot
           mkdir $CHROOT
           mkarchroot $CHROOT/root base-devel
+
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Download repository database
         run: |
