@@ -36,6 +36,7 @@ jobs:
           sudo -u build makepkg -si --noconfirm
           cd ..
 
+          echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen
           locale-gen
           dbus-uuidgen --ensure=/etc/machine-id
 
