@@ -39,7 +39,6 @@ jobs:
           dbus-uuidgen --ensure=/etc/machine-id
 
           sed -i "s/en_US de_DE/en_US/g" /usr/bin/mkarchroot
-          cat /usr/bin/mkarchroot
 
           CHROOT=$HOME/chroot
           mkdir $CHROOT

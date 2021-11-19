@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-CHROOT=$HOME/chroot
+CHROOT=/github/home/chroot/root
 
 for dir in $(aur graph */.SRCINFO | tsort | tac); do
 	echo testing "$dir"
@@ -15,7 +15,7 @@ for dir in $(aur graph */.SRCINFO | tsort | tac); do
 	# TODO: there should be EPOCH in here somewhere
 	if [ $(vercmp "$remotever" $(source PKGBUILD; printf %s "$pkgver-$pkgrel")) -lt 0 ]; then
 		echo "=== Building $dir ==="
-		makechrootpkg -c -r $CHROOT
+		makechrootpkg -c -r "$CHROOT"
 		#aur build -c -r /home/build/custom -d custom -- --noprogressbar
 	fi
 	popd > /dev/null
