@@ -22,7 +22,7 @@ jobs:
           EOF
 
           pacman-key --init
-          pacman -Syu git expac devtools --noconfirm
+          pacman -Syu base base-devel git expac devtools --noconfirm
 
           echo Workspace: $GITHUB_WORKSPACE
           ls -lha $GITHUB_WORKSPACE
