@@ -23,7 +23,7 @@ jobs:
 
           pacman-key --init
           pacman -Syu base base-devel git expac devtools --noconfirm
-          pacman -Qqn | pacman -S -
+          pacman -Qqn | pacman -S --noconfirm -
 
           echo Workspace: $GITHUB_WORKSPACE
           ls -lha $GITHUB_WORKSPACE
