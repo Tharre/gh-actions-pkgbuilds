@@ -18,6 +18,12 @@ jobs:
 
       - name: Prepare environment
         run: |
+          cat << EOF >> /etc/pacman.conf
+          [custom]
+          SigLevel = Optional TrustAll
+          Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
+          EOF
+
           pacman-key --init
           pacman -Syu git expac --noconfirm
 
@@ -33,16 +39,16 @@ jobs:
           sudo -u build makepkg -si --noconfirm
           cd ..
 
+          CHROOT=$HOME/chroot
+          mkdir $CHROOT
+          mkarchroot $CHROOT/root base-devel
+
       - name: Download repository database
         run: |
-          env
-          curl -LO "https://github.com/$GITHUB_REPOSITORY/releases/download/current/custom.db"
-          curl -LO "https://github.com/$GITHUB_REPOSITORY/releases/download/current/custom.files"
-
-          echo "URL: https://github.com/$GITHUB_REPOSITORY/releases/download/current/custom.db"
-
-          cat custom.db
-          cat custom.files
+          cd $GITHUB_WORKSPACE
+          curl -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db"
+          curl -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.files"
+          echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db"
 
       - name: Build Arch Linux Package(s)
         run: |
