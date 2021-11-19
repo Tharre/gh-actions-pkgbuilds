@@ -36,10 +36,10 @@ jobs:
       - name: Download repository database
         run: |
           env
-          curl -LO "https://github.com/$GITHUB_REPOSITORY/releases/download/repository/custom.db"
-          curl -LO "https://github.com/$GITHUB_REPOSITORY/releases/download/repository/custom.files"
+          curl -LO "https://github.com/$GITHUB_REPOSITORY/releases/download/current/custom.db"
+          curl -LO "https://github.com/$GITHUB_REPOSITORY/releases/download/current/custom.files"
 
-          echo URL: "https://github.com/$GITHUB_REPOSITORY/releases/download/repository/custom.db"
+          echo "URL: https://github.com/$GITHUB_REPOSITORY/releases/download/current/custom.db"
 
           cat custom.db
           cat custom.files
