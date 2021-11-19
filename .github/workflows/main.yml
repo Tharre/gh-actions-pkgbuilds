@@ -40,9 +40,9 @@ jobs:
 
           sed -i "s/en_US de_DE/en_US/g" /usr/bin/mkarchroot
 
-          CHROOT=$HOME/chroot
-          mkdir $CHROOT
-          mkarchroot $CHROOT/root base-devel
+          # CHROOT=$HOME/chroot
+          # mkdir $CHROOT
+          # mkarchroot $CHROOT/root base-devel
 
       - name: Checkout
         uses: actions/checkout@v2
