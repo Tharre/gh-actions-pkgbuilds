@@ -33,9 +33,10 @@ jobs:
           cd /home/build
           sudo -u build git clone https://aur.archlinux.org/aurutils
           cd aurutils
-          #sudo -u build makepkg -si --noconfirm
-          extra-x86_64-build
+          sudo -u build makepkg -si --noconfirm
           cd ..
+
+          dbus-uuidgen --ensure=/etc/machine-id
 
           CHROOT=$HOME/chroot
           mkdir $CHROOT
