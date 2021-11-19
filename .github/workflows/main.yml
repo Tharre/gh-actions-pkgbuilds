@@ -35,8 +35,12 @@ jobs:
 
       - name: Download repository database
         run: |
+          env
           curl -LO https://github.com/$GITHUB_REPOSITORY/releases/download/repository/custom.db
           curl -LO https://github.com/$GITHUB_REPOSITORY/releases/download/repository/custom.files
+
+          cat custom.db
+          cat custom.files
 
       - name: Build Arch Linux Package(s)
         run: |
