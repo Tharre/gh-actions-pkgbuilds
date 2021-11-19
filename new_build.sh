@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-CHROOT=/github/home/chroot/root
+CHROOT=/github/home/chroot
 
 for dir in $(aur graph */.SRCINFO | tsort | tac); do
 	echo testing "$dir"
