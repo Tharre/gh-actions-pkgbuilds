@@ -1,9 +1,9 @@
 #!/bin/bash -e
 
-# CHROOT=/github/home/chroot
-CHROOT=$HOME/chroot
-mkdir $CHROOT
-mkarchroot $CHROOT/root base-devel
+CHROOT=/github/home/chroot
+# CHROOT=$HOME/chroot
+# mkdir $CHROOT
+# mkarchroot $CHROOT/root base-devel
 
 for dir in $(aur graph */.SRCINFO | tsort | tac); do
 	echo testing "$dir"

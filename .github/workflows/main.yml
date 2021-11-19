@@ -15,11 +15,11 @@ jobs:
     steps:
       - name: Prepare environment
         run: |
-          # cat << EOF >> /etc/pacman.conf
-          # [custom]
-          # SigLevel = Optional TrustAll
-          # Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
-          # EOF
+          cat << EOF >> /etc/pacman.conf
+          [custom]
+          SigLevel = Optional TrustAll
+          Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
+          EOF
 
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
@@ -40,9 +40,11 @@ jobs:
 
           sed -i "s/en_US de_DE/en_US/g" /usr/bin/mkarchroot
 
-          # CHROOT=$HOME/chroot
-          # mkdir $CHROOT
-          # mkarchroot $CHROOT/root base-devel
+          chown build:build $HOME
+
+          CHROOT=$HOME/chroot
+          mkdir $CHROOT
+          mkarchroot $CHROOT/root base-devel
 
       - name: Checkout
         uses: actions/checkout@v2
