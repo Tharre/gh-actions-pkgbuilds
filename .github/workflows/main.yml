@@ -21,6 +21,9 @@ jobs:
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
           EOF
 
+          mkdir -p ~/.gnupg
+          echo "keyserver-options auto-key-retrieve" > ~/.gnupg/gpg.conf
+
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
 
