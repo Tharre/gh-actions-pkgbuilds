@@ -50,7 +50,7 @@ jobs:
 
           CHROOT=/buildchroot
           mkdir $CHROOT
-          mkarchroot $CHROOT/root base-devel
+          mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
 
       - name: Checkout
         uses: actions/checkout@v2
