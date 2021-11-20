@@ -15,11 +15,14 @@ jobs:
     steps:
       - name: Prepare environment
         run: |
+          mkdir /repository
+          chown -Rh build:build /repository
+
           cat << EOF >> /etc/pacman.conf
           [custom]
           SigLevel = Optional TrustAll
-          Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
           Server = file:///repository
+          Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
           EOF
 
           pacman-key --init
@@ -55,8 +58,6 @@ jobs:
 
       - name: Download repository database
         run: |
-          mkdir /repository
-          chown -Rh build:build /repository
           cd /repository
           curl -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db.tar.gz"
           curl -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.files.tar.gz"
