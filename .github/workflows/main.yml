@@ -21,11 +21,6 @@ jobs:
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
           EOF
 
-          mkdir -p ~/.gnupg
-          echo "keyserver-options auto-key-retrieve" > ~/.gnupg/gpg.conf
-          echo "keyserver hkps://keys.openpgp.org" >> ~/.gnupg/gpg.conf
-          gpg --recv-key B6C41CE35664996C
-
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
 
@@ -34,6 +29,10 @@ jobs:
 
           useradd -m -G wheel -s /bin/bash build
           echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/00_wheel
+
+          mkdir -p /home/build/.gnupg
+          echo "keyserver-options auto-key-retrieve" > /home/build/.gnupg/gpg.conf
+          echo "keyserver hkps://keys.openpgp.org" >> /home/build/.gnupg/gpg.conf
 
           cd /home/build
           sudo -u build git clone https://aur.archlinux.org/aurutils
