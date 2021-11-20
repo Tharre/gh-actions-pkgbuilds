@@ -33,6 +33,7 @@ jobs:
           mkdir -p /home/build/.gnupg
           echo "keyserver-options auto-key-retrieve" > /home/build/.gnupg/gpg.conf
           echo "keyserver hkps://keys.openpgp.org" >> /home/build/.gnupg/gpg.conf
+          chown -Rh build:build /home/build/.gnupg/
 
           cd /home/build
           sudo -u build git clone https://aur.archlinux.org/aurutils
