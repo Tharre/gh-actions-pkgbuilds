@@ -19,6 +19,7 @@ jobs:
           [custom]
           SigLevel = Optional TrustAll
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
+          Server = file:///repository
           EOF
 
           pacman-key --init
@@ -54,7 +55,9 @@ jobs:
 
       - name: Download repository database
         run: |
-          cd $GITHUB_WORKSPACE
+          mkdir /repository
+          chown -Rh build:build /repository
+          cd /repository
           curl -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db"
           curl -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.files"
           echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db"
