@@ -24,6 +24,7 @@ jobs:
           mkdir -p ~/.gnupg
           echo "keyserver-options auto-key-retrieve" > ~/.gnupg/gpg.conf
           echo "keyserver hkps://keys.openpgp.org" >> ~/.gnupg/gpg.conf
+          gpg --recv-key B6C41CE35664996C
 
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
