@@ -16,7 +16,6 @@ jobs:
       - name: Prepare environment
         run: |
           mkdir /repository
-          chown -Rh build:build /repository
 
           cat << EOF >> /etc/pacman.conf
           [custom]
@@ -58,6 +57,7 @@ jobs:
 
       - name: Download repository database
         run: |
+          chown -Rh build:build /repository
           cd /repository
           curl -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db.tar.gz"
           curl -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.files.tar.gz"
