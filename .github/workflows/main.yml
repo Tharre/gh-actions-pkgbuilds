@@ -23,7 +23,7 @@ jobs:
 
           mkdir -p ~/.gnupg
           echo "keyserver-options auto-key-retrieve" > ~/.gnupg/gpg.conf
-          echo "keyserver hkps://keys.opengpg.org" >> ~/.gnupg/gpg.conf
+          echo "keyserver hkps://keys.openpgp.org" >> ~/.gnupg/gpg.conf
 
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
