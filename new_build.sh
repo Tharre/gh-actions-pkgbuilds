@@ -21,6 +21,7 @@ for dir in $(aur graph */.SRCINFO | tsort | tac); do
 		echo "=== Building $dir ==="
 		makechrootpkg -c -U build -r "$CHROOT"
 		repo-add /repository/custom.db.tar.gz *.pkg*
+		mv *.pkg* /repository/
 		#aur build -c -r /home/build/custom -d custom -- --noprogressbar
 	fi
 	popd > /dev/null
