@@ -19,6 +19,7 @@ for dir in $(aur graph */.SRCINFO | tsort | tac); do
 	if [ $(vercmp "$remotever" $(source PKGBUILD; printf %s "$pkgver-$pkgrel")) -lt 0 ]; then
 		echo "=== Building $dir ==="
 		makechrootpkg -c -U build -r "$CHROOT"
+		repo-add /repository/custom.db *.pkg*
 		#aur build -c -r /home/build/custom -d custom -- --noprogressbar
 	fi
 	popd > /dev/null
