@@ -56,5 +56,6 @@ jobs:
 
       - name: Build Arch Linux Package(s)
         run: |
+          chown -Rh build:build $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
           ./new_build.sh
