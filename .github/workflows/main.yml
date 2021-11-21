@@ -57,11 +57,13 @@ jobs:
 
       - name: Download repository database
         run: |
-          chown -Rh build:build /repository
           cd /repository
           curl -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db.tar.gz"
           curl -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.files.tar.gz"
           echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db"
+          ln -s /repository/custom.db.tar.gz /repository/custom.db
+          ln -s /repository/custom.files.tar.gz /repository/custom.files
+          chown -Rh build:build /repository
 
       - name: Build Arch Linux Package(s)
         run: |
