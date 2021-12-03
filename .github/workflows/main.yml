@@ -16,8 +16,26 @@ jobs:
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup
     steps:
+      - name: Download repository database
+        run: |
+          mkdir /repository
+          cd /repository
+          curl -sS -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db.tar.gz"
+          curl -sS -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.files.tar.gz"
+          echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db"
+          ln -s /repository/custom.db.tar.gz /repository/custom.db
+          ln -s /repository/custom.files.tar.gz /repository/custom.files
+          chown -Rh build:build /repository
+
       - name: Prepare environment
         run: |
+          cat << EOF >> /etc/pacman.conf
+          [custom]
+          SigLevel = Optional TrustAll
+          Server = file:///repository
+          Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
+          EOF
+
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
 
@@ -39,31 +57,12 @@ jobs:
 
           sed -i "s/en_US de_DE/en_US/g" /usr/bin/mkarchroot
 
-          mkdir /repository
-          cp /etc/pacman.conf .
-          cat << EOF >> pacman.conf
-          [custom]
-          SigLevel = Optional TrustAll
-          Server = file:///repository
-          Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
-          EOF
-
           CHROOT=/buildchroot
           mkdir $CHROOT
-          mkarchroot -C pacman.conf $CHROOT/root base-devel
+          mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
 
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Download repository database
-        run: |
-          cd /repository
-          curl -sS -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db.tar.gz"
-          curl -sS -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.files.tar.gz"
-          echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db"
-          ln -s /repository/custom.db.tar.gz /repository/custom.db
-          ln -s /repository/custom.files.tar.gz /repository/custom.files
-          chown -Rh build:build /repository
 
       - name: Build Arch Linux Package(s)
         run: |
