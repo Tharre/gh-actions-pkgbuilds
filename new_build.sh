@@ -7,6 +7,8 @@ for dir in $(aur graph */.SRCINFO | tsort | tac); do
 
 	pushd "$dir" > /dev/null
 
+	echo "DEBUG123: $(expac -S1 "%v" "custom/$dir")"
+
 	# directory may also reference the pkgbase, in which case test if the
 	# first package in pkgname is up to date
 	remotever="$(expac -S1 "%v" "custom/$dir" || expac -S1 "%v" "custom/$(source PKGBUILD; printf %s "$pkgname")" || echo NONE)"
