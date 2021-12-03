@@ -23,7 +23,7 @@ for dir in $(aur graph */.SRCINFO | tsort | tac); do
 	# TODO: there should be EPOCH in here somewhere
 	if [ $(vercmp "$remotever" $(source PKGBUILD; printf %s "$pkgver-$pkgrel")) -lt 0 ]; then
 		echo "=== Building $dir ==="
-		makechrootpkg -c -U build -r "$CHROOT"
+		makechrootpkg -c -U build -D /repository -r "$CHROOT"
 		repo-add /repository/custom.db.tar.gz *.pkg*
 		mv *.pkg* /repository/
 		#aur build -c -r /home/build/custom -d custom -- --noprogressbar
