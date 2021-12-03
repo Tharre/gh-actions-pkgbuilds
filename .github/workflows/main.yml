@@ -70,8 +70,9 @@ jobs:
           chown -Rh build:build $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
           ./new_build.sh
+          rm /repository/*.old /repository/{custom.db,custom.files}
 
-      - name: Upload package artefacts
+      - name: Upload package artefact(s)
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{secrets.GITHUB_TOKEN}}

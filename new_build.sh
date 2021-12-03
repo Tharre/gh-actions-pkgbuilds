@@ -4,7 +4,6 @@ CHROOT=/buildchroot
 
 for dir in $(aur graph */.SRCINFO | tsort | tac); do
 	echo testing "$dir"
-	ls -lha /repository
 
 	pushd "$dir" > /dev/null
 
