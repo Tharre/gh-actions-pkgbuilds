@@ -50,7 +50,7 @@ jobs:
 
           CHROOT=/buildchroot
           mkdir $CHROOT
-          mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
+          mkarchroot -f /repository -C /etc/pacman.conf $CHROOT/root base-devel
           arch-nspawn $CHROOT/root pacman -Syu
 
       - name: Checkout
