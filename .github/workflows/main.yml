@@ -20,9 +20,9 @@ jobs:
         run: |
           mkdir /repository
           cd /repository
-          curl -sS -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db.tar.gz"
-          curl -sS -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.files.tar.gz"
-          echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db"
+          curl -sS -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/custom.db.tar.gz"
+          curl -sS -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/custom.files.tar.gz"
+          echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/custom.db"
           ln -s /repository/custom.db.tar.gz /repository/custom.db
           ln -s /repository/custom.files.tar.gz /repository/custom.files
 
