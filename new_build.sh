@@ -7,9 +7,11 @@ for dir in $(aur graph */.SRCINFO | tsort | tac); do
 
 	pushd "$dir" > /dev/null
 
-	echo "DEBUG123: $(expac -S1 "%v" "custom/$dir")"
+	#echo "DEBUG123: $(expac -S1 "%v" "custom/$dir")"
+	echo "DEBUG123:"
 	pacman -Ss $dir
 	pacman -Sys $dir
+	echo "---"
 
 	# directory may also reference the pkgbase, in which case test if the
 	# first package in pkgname is up to date
