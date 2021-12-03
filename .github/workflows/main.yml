@@ -1,5 +1,8 @@
 name: CI
 
+env:
+  RELEASE_NAME: repo
+
 on:
   push:
     branches: master
@@ -17,9 +20,6 @@ jobs:
         run: |
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
-
-          echo Workspace: $GITHUB_WORKSPACE
-          ls -lha $GITHUB_WORKSPACE
 
           useradd -m -G wheel -s /bin/bash build
           echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/00_wheel
@@ -58,8 +58,8 @@ jobs:
       - name: Download repository database
         run: |
           cd /repository
-          curl -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db.tar.gz"
-          curl -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.files.tar.gz"
+          curl -sS -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db.tar.gz"
+          curl -sS -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.files.tar.gz"
           echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db"
           ln -s /repository/custom.db.tar.gz /repository/custom.db
           ln -s /repository/custom.files.tar.gz /repository/custom.files
@@ -70,3 +70,12 @@ jobs:
           chown -Rh build:build $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
           ./new_build.sh
+
+      - name: Upload package artefacts
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{secrets.GITHUB_TOKEN}}
+          tag: ${{env.RELEASE_NAME}}
+          file: '/repository/*'
+          file_glob: true
+          overwrite: true
