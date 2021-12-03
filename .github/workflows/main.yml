@@ -25,7 +25,6 @@ jobs:
           echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current/custom.db"
           ln -s /repository/custom.db.tar.gz /repository/custom.db
           ln -s /repository/custom.files.tar.gz /repository/custom.files
-          chown -Rh build:build /repository
 
       - name: Prepare environment
         run: |
@@ -41,6 +40,7 @@ jobs:
 
           useradd -m -G wheel -s /bin/bash build
           echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/00_wheel
+          chown -Rh build:build /repository
 
           mkdir -p /home/build/.gnupg
           echo "keyserver-options auto-key-retrieve" > /home/build/.gnupg/gpg.conf
