@@ -1,13 +1,6 @@
 #!/bin/bash -e
 
 CHROOT=/buildchroot
-# CHROOT=$HOME/chroot
-# mkdir $CHROOT
-# mkarchroot $CHROOT/root base-devel
-
-echo DEBUG:
-cat /etc/pacman.conf
-sudo pacman -Syu
 
 for dir in $(aur graph */.SRCINFO | tsort | tac); do
 	echo testing "$dir"
@@ -24,8 +17,8 @@ for dir in $(aur graph */.SRCINFO | tsort | tac); do
 	if [ $(vercmp "$remotever" $(source PKGBUILD; printf %s "$pkgver-$pkgrel")) -lt 0 ]; then
 		echo "=== Building $dir ==="
 		makechrootpkg -c -u -U build -D /repository -r "$CHROOT"
-		repo-add /repository/custom.db.tar.gz *.pkg*
-		mv *.pkg* /repository/
+		repo-add /repository/custom.db.tar.gz *.pkg.tar*
+		mv *.pkg.tar* /repository/
 		#aur build -c -r /home/build/custom -d custom -- --noprogressbar
 	fi
 	popd > /dev/null
