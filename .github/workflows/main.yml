@@ -22,6 +22,7 @@ jobs:
           cd /repository
           curl -sS -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/custom.db.tar.gz"
           curl -sS -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/custom.files.tar.gz"
+          ls -lha /repository
           echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/custom.db"
           ln -s /repository/custom.db.tar.gz /repository/custom.db
           ln -s /repository/custom.files.tar.gz /repository/custom.files
