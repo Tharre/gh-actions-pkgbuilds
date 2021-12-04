@@ -31,7 +31,7 @@ jobs:
         run: |
           cat << EOF >> "$GITHUB_WORKSPACE/pacman.conf"
           [custom]
-          SigLevel = Optional TrustAll
+          SigLevel = Required DatabaseOptional
           Server = file:///repository
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
           EOF
@@ -44,7 +44,7 @@ jobs:
 
           useradd -m -G wheel -s /bin/bash build
           echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/00_wheel
-          chown -Rh build:build /repository
+          #chown -Rh build:build /repository
 
           mkdir -p /home/build/.gnupg
           echo "keyserver-options auto-key-retrieve" > /home/build/.gnupg/gpg.conf
@@ -61,7 +61,11 @@ jobs:
 
       - name: Import GPG Key
         run: |
-          echo -e "$repo_key" | gpg --import
+          printf "%s" "$repo_key" | gpg --import
+          (echo 5; echo y; echo save) |
+            gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "$(
+            gpg --list-packets <key.asc |
+            awk '$1=="keyid:"{print$2;exit}')" trust
         env:
           repo_key: ${{ secrets.REPO_KEY }}
 
