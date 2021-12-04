@@ -2,7 +2,7 @@
 
 CHROOT=/buildchroot
 
-for dir in $(aur graph */.SRCINFO | tsort | tac); do
+for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 	echo testing "$dir"
 
 	pushd "$dir" > /dev/null

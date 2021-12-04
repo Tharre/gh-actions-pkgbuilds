@@ -45,11 +45,7 @@ jobs:
           echo "keyserver hkps://keys.openpgp.org" >> /home/build/.gnupg/gpg.conf
           chown -Rh build:build /home/build/.gnupg/
 
-          cd /home/build
-          sudo -u build git clone https://aur.archlinux.org/aurutils
-          cd aurutils
-          sudo -u build makepkg -si --noconfirm
-          cd ..
+          mv $GITHUB_WORKSPACE/aur-graph /usr/bin/
 
           dbus-uuidgen --ensure=/etc/machine-id
 
