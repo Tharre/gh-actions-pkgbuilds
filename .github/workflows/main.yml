@@ -20,7 +20,7 @@ jobs:
         run: |
           mkdir /repository
           cd /repository
-          curl -f -L --remote-name-all "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/"{custom.db.tar.gz,custom.files.tar.gz} || repo-add custom.db.tar.gz
+          curl -fL --remote-name-all "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/"{custom.db.tar.gz,custom.files.tar.gz} || repo-add custom.db.tar.gz
           ln -sf /repository/custom.db.tar.gz /repository/custom.db
           ln -sf /repository/custom.files.tar.gz /repository/custom.files
 
@@ -39,6 +39,8 @@ jobs:
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
 
+          mv $GITHUB_WORKSPACE/aur-graph /usr/bin/
+
           useradd -m -G wheel -s /bin/bash build
           echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/00_wheel
           chown -Rh build:build /repository
@@ -47,9 +49,6 @@ jobs:
           echo "keyserver-options auto-key-retrieve" > /home/build/.gnupg/gpg.conf
           echo "keyserver hkps://keys.openpgp.org" >> /home/build/.gnupg/gpg.conf
           chown -Rh build:build /home/build/.gnupg/
-
-          ls -lha $GITHUB_WORKSPACE
-          mv $GITHUB_WORKSPACE/aur-graph /usr/bin/
 
           dbus-uuidgen --ensure=/etc/machine-id
 
@@ -63,7 +62,7 @@ jobs:
         run: |
           chown -Rh build:build $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
-          ./new_build.sh
+          ./build.sh
           rm -f /repository/*.old /repository/{custom.db,custom.files}
 
       - name: Upload package artefact(s)
