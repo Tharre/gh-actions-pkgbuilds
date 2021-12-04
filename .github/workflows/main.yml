@@ -63,9 +63,7 @@ jobs:
         run: |
           printf "%s" "$repo_key" | gpg --import
           (echo 5; echo y; echo save) |
-            gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "$(
-            printf '%s' $repo_key | gpg --list-packets |
-            awk '$1=="keyid:"{print$2;exit}')" trust
+            gpg --command-fd 0 --no-tty --no-greeting -q --edit-key C7F8461F3FFAFDA0 trust
         env:
           repo_key: ${{ secrets.REPO_KEY }}
 
