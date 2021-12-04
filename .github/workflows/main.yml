@@ -59,10 +59,7 @@ jobs:
           mkdir $CHROOT
           mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
 
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v4
-        with:
-          gpg_private_key: ${{ secrets.REPO_KEY }}
+          echo -e "$REPO_KEY" | gpg --import
 
       - name: Build Arch Linux Package(s)
         run: |
