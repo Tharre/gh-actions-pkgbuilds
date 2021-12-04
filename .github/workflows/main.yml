@@ -31,10 +31,12 @@ jobs:
         run: |
           cat << EOF >> "$GITHUB_WORKSPACE/pacman.conf"
           [custom]
-          SigLevel = Required DatabaseOptional
+          SigLevel = Optional TrustAll
           Server = file:///repository
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
           EOF
+
+          #SigLevel = Required DatabaseOptional
 
           mv "$GITHUB_WORKSPACE/pacman.conf" /etc/pacman.conf
           mv "$GITHUB_WORKSPACE/aur-graph" /usr/bin/
@@ -76,6 +78,7 @@ jobs:
       - name: Build Arch Linux Package(s)
         run: |
           echo "DEBUG:"
+          whoami
           gpg --list-keys --fingerprint
 
           chown -Rh build:build $GITHUB_WORKSPACE
