@@ -59,8 +59,11 @@ jobs:
           mkdir $CHROOT
           mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
 
-          echo "DEBUG: $REPO_KEY"
-          echo -e "$REPO_KEY" | gpg --import
+      - name: Import GPG Key
+        run: |
+          echo -e "$repo_key" | gpg --import
+        env:
+          repo_key: ${{ secrets.REPO_KEY }}
 
       - name: Build Arch Linux Package(s)
         run: |
