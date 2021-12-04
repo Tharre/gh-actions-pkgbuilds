@@ -69,6 +69,9 @@ jobs:
 
       - name: Build Arch Linux Package(s)
         run: |
+          echo "DEBUG:"
+          gpg --list-keys --fingerprint
+
           chown -Rh build:build $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
           ./build.sh
