@@ -20,9 +20,7 @@ jobs:
         run: |
           mkdir /repository
           cd /repository
-          curl -f -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/custom.db.tar.gz"
-          curl -f -LO "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/custom.files.tar.gz"
-          [ ! -f  "custom.db.tar.gz" ] && repo-add custom.db.tar.gz
+          curl -f -L --remote-name-all "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/"{custom.db.tar.gz,custom.files.tar.gz} || repo-add custom.db.tar.gz
           ln -sf /repository/custom.db.tar.gz /repository/custom.db
           ln -sf /repository/custom.files.tar.gz /repository/custom.files
 
