@@ -29,17 +29,18 @@ jobs:
 
       - name: Prepare environment
         run: |
-          cat << EOF >> /etc/pacman.conf
+          cat << EOF >> "$GITHUB_WORKSPACE/pacman.conf"
           [custom]
           SigLevel = Optional TrustAll
           Server = file:///repository
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/current
           EOF
 
+          mv "$GITHUB_WORKSPACE/pacman.conf" /etc/pacman.conf
+          mv "$GITHUB_WORKSPACE/aur-graph" /usr/bin/
+
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
-
-          mv $GITHUB_WORKSPACE/aur-graph /usr/bin/
 
           useradd -m -G wheel -s /bin/bash build
           echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/00_wheel
