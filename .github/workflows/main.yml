@@ -55,10 +55,6 @@ jobs:
 
           sed -i "s/en_US de_DE/en_US/g" /usr/bin/mkarchroot
 
-          CHROOT=/buildchroot
-          mkdir $CHROOT
-          mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
-
       - name: Import GPG Key
         run: |
           printf "%s" "$repo_key" | gpg --import
@@ -66,6 +62,12 @@ jobs:
             gpg --command-fd 0 --no-tty --no-greeting -q --edit-key C7F8461F3FFAFDA0 trust
         env:
           repo_key: ${{ secrets.REPO_KEY }}
+
+      - name: Create chroot
+        run: |
+          CHROOT=/buildchroot
+          mkdir $CHROOT
+          mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
 
       - name: Build Arch Linux Package(s)
         run: |
