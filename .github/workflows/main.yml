@@ -24,6 +24,9 @@ jobs:
           ln -sf /repository/custom.db.tar.gz /repository/custom.db
           ln -sf /repository/custom.files.tar.gz /repository/custom.files
 
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Prepare environment
         run: |
           cat << EOF >> /etc/pacman.conf
@@ -55,9 +58,6 @@ jobs:
           CHROOT=/buildchroot
           mkdir $CHROOT
           mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
-
-      - name: Checkout
-        uses: actions/checkout@v2
 
       - name: Build Arch Linux Package(s)
         run: |
