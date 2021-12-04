@@ -60,6 +60,8 @@ jobs:
           printf "%s" "$repo_key" | gpg --import
           (echo 5; echo y; echo save) |
             gpg --command-fd 0 --no-tty --no-greeting -q --edit-key C7F8461F3FFAFDA0 trust
+
+          sudo -u build printf "%s" "$repo_key" | gpg --import
         env:
           repo_key: ${{ secrets.REPO_KEY }}
 
