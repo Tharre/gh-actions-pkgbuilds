@@ -45,6 +45,7 @@ jobs:
           echo "keyserver hkps://keys.openpgp.org" >> /home/build/.gnupg/gpg.conf
           chown -Rh build:build /home/build/.gnupg/
 
+          ls -lha $GITHUB_WORKSPACE
           mv $GITHUB_WORKSPACE/aur-graph /usr/bin/
 
           dbus-uuidgen --ensure=/etc/machine-id
