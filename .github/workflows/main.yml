@@ -32,7 +32,7 @@ jobs:
         run: |
           cat << EOF >> "$GITHUB_WORKSPACE/pacman.conf"
           [custom]
-          SigLevel = Optional DatabaseOptional
+          SigLevel = Required DatabaseOptional
           Server = file:///repository
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo
           EOF
@@ -42,6 +42,8 @@ jobs:
 
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
+
+          echo "GPGKEY=\"$GPGKEY\"" >> /etc/makepkg.conf
 
           useradd -m -G wheel -s /bin/bash build
           echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/00_wheel
