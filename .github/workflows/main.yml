@@ -32,12 +32,10 @@ jobs:
         run: |
           cat << EOF >> "$GITHUB_WORKSPACE/pacman.conf"
           [custom]
-          SigLevel = Optional TrustAll
+          SigLevel = Required DatabaseOptional
           Server = file:///repository
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo
           EOF
-
-          #SigLevel = Required DatabaseOptional
 
           mv "$GITHUB_WORKSPACE/pacman.conf" /etc/pacman.conf
           mv "$GITHUB_WORKSPACE/aur-graph" /usr/bin/
@@ -62,8 +60,7 @@ jobs:
         run: |
           printf "%s" "$repo_key" | gpg --import
           printf "%s" "$repo_key" | pacman-key -a -
-          #(echo 5; echo y; echo save) |
-          #  gpg --command-fd 0 --no-tty --no-greeting -q --edit-key C7F8461F3FFAFDA0 trust
+          pacman-key --lsign-key "$GPGKEY"
         env:
           repo_key: ${{ secrets.REPO_KEY }}
 
