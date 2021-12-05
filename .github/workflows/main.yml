@@ -32,7 +32,7 @@ jobs:
         run: |
           cat << EOF >> "$GITHUB_WORKSPACE/pacman.conf"
           [custom]
-          SigLevel = Optional DatabaseOptional
+          SigLevel = Required DatabaseOptional
           Server = file:///repository
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo
           EOF
