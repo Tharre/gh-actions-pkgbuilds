@@ -79,6 +79,7 @@ jobs:
           cd $GITHUB_WORKSPACE
           ./build.sh
           rm -f /repository/*.old{,.sig}
+          ls -lha /repository
 
       - name: Upload package artefact(s)
         uses: svenstaro/upload-release-action@v2
