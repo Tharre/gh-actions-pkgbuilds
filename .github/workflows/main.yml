@@ -54,16 +54,6 @@ jobs:
           ln -sf /repository/custom.db.tar.gz /repository/custom.db
           ln -sf /repository/custom.files.tar.gz /repository/custom.files
 
-      - name: Import GPG Key
-        run: |
-          printf "%s" "$repo_key" | gpg --import
-          printf "%s" "$repo_key" | pacman-key -a -
-          pacman-key --lsign-key "$GPGKEY"
-        env:
-          repo_key: ${{ secrets.REPO_KEY }}
-
-      - name: Build Arch Linux Package(s)
-        run: |
           cat << EOF >> "$GITHUB_WORKSPACE/pacman.conf"
           [custom]
           SigLevel = Required DatabaseOptional
@@ -76,6 +66,16 @@ jobs:
 
           pacman -Syu --noconfirm
 
+      - name: Import GPG Key
+        run: |
+          printf "%s" "$repo_key" | gpg --import
+          printf "%s" "$repo_key" | pacman-key -a -
+          pacman-key --lsign-key "$GPGKEY"
+        env:
+          repo_key: ${{ secrets.REPO_KEY }}
+
+      - name: Build Arch Linux Package(s)
+        run: |
           chown -Rh build:build $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
           ./build.sh
