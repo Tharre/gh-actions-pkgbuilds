@@ -2,6 +2,7 @@ name: CI
 
 env:
   RELEASE_NAME: repo
+  REPO_NAME: custom
   GPGKEY: C7F8461F3FFAFDA0
 
 on:
@@ -50,12 +51,14 @@ jobs:
           # with --packagelist
           chown build:root /repository
           cd /repository
-          curl -fL --remote-name-all "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/"{custom.db.tar.gz,custom.files.tar.gz} || repo-add custom.db.tar.gz
-          ln -sf /repository/custom.db.tar.gz /repository/custom.db
-          ln -sf /repository/custom.files.tar.gz /repository/custom.files
+          BASE_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$RELEASE_NAME/$REPO_NAME"
+          curl -fL --remote-name-all "$BASE_URL"{.db.tar.gz,.files.tar.gz} \
+              || repo-add "$REPO_NAME.db.tar.gz"
+          ln -sf "/repository/$REPO_NAME.db.tar.gz" "/repository/$REPO_NAME.db"
+          ln -sf "/repository/$REPO_NAME.files.tar.gz" "/repository/$REPO_NAME.files"
 
           cat << EOF >> "$GITHUB_WORKSPACE/pacman.conf"
-          [custom]
+          [$REPO_NAME]
           SigLevel = Required DatabaseOptional
           Server = file:///repository
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo
