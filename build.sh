@@ -19,9 +19,14 @@ for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 
 		echo "=== Building $dir ==="
 		makechrootpkg -c -u -U build -D /repository -r "$CHROOT"
-		repo-add -s /repository/custom.db.tar.gz *.pkg.tar*
-		find . -name "*.pkg.tar*" -exec gpg --detach-sign {} \;
-		# makepkg --packagelist | xargs -L1 gpg --sign
+
+		makepkg --packagelist | while IFS="" read -r pkg
+		do
+			printf '%s\n' "$pkg"
+			repo-add -s /repository/custom.db.tar.gz "$pkg"
+			gpg --detach-sign "$pkg"
+		done
+
 		mv *.pkg.tar* /repository/
 	fi
 	popd > /dev/null
