@@ -11,7 +11,8 @@ for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 	    || expac -S1 "%v" "$REPO_NAME/$(source PKGBUILD; printf %s "$pkgname")" \
 	    || echo NONE)"
 
-	if [ $(vercmp "$remotever" $(source PKGBUILD; printf %s "${epoch:-0}:$pkgver-$pkgrel")) -lt 0 ]; then
+	if [ $(vercmp "$remotever" \
+	    $(source PKGBUILD; printf %s "${epoch:-0}:$pkgver-$pkgrel")) -lt 0 ]; then
 		echo "=== Creating build chroot ==="
 		if [ ! -d "$CHROOT" ]; then
 			mkdir $CHROOT
