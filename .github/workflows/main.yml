@@ -22,7 +22,12 @@ jobs:
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
 
-          echo "GPGKEY=\"$GPGKEY\"" >> /etc/makepkg.conf
+          cat << EOF >> /etc/makepkg.conf
+          GPGKEY="$GPGKEY"
+          PACKAGER="Github Actions <$GITHUB_SERVER_URL/$GITHUB_REPOSITORY>"
+          EOF
+
+          cat /etc/makepkg.conf
 
           useradd -m -G wheel -s /bin/bash build
           echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/00_wheel
