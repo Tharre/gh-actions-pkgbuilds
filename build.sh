@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 CHROOT=/buildchroot
+chmod 777 /repository
 
 for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 	pushd "$dir" > /dev/null
@@ -20,7 +21,7 @@ for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 		echo "=== Building $dir ==="
 		makechrootpkg -c -u -U build -D /repository -r "$CHROOT"
 
-		sudo -u build PKGDEST=/tmp SRCDEST=/tmp makepkg --packagelist | while IFS="" read -r pkg
+		sudo -u build SRCDEST=/tmp makepkg --packagelist | while IFS="" read -r pkg
 		do
 			printf '%s\n' "$pkg"
 			repo-add -s /repository/custom.db.tar.gz "$pkg"
