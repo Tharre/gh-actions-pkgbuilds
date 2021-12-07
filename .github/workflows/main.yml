@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: archlinux:base-devel
+      image: archlinux:base
       options: --privileged
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup
@@ -26,8 +26,6 @@ jobs:
           GPGKEY="$GPGKEY"
           PACKAGER="Github Actions <$GITHUB_SERVER_URL/$GITHUB_REPOSITORY>"
           EOF
-
-          cat /etc/makepkg.conf
 
           useradd -m -G wheel -s /bin/bash build
           echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/00_wheel
