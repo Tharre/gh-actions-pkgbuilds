@@ -1,6 +1,7 @@
 name: CI
 
 env:
+  # don't use spaces newlines or similar for these, it will not work
   RELEASE_NAME: repo
   REPO_NAME: custom
   GPGKEY: C7F8461F3FFAFDA0
@@ -56,8 +57,8 @@ jobs:
           ln -sf "/repository/$REPO_NAME.db.tar.gz" "/repository/$REPO_NAME.db"
           ln -sf "/repository/$REPO_NAME.files.tar.gz" "/repository/$REPO_NAME.files"
 
-          mv "$GITHUB_WORKSPACE/.github/workflow/pacman.conf" /etc/pacman.conf
-          mv "$GITHUB_WORKSPACE/.github/workflow/aur-graph" /usr/bin/
+          mv "$GITHUB_WORKSPACE/.github/workflows/pacman.conf" /etc/pacman.conf
+          mv "$GITHUB_WORKSPACE/.github/workflows/aur-graph" /usr/bin/
 
           cat << EOF >> /etc/pacman.conf
           [$REPO_NAME]
