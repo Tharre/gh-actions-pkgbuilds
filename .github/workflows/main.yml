@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: archlinux:base
+      image: archlinux:base-devel
       options: --privileged
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup
@@ -20,7 +20,7 @@ jobs:
       - name: Prepare environment
         run: |
           pacman-key --init
-          pacman -Syu --noconfirm sudo git expac devtools
+          pacman -Syu --noconfirm git expac devtools
 
           cat << EOF >> /etc/makepkg.conf
           GPGKEY="$GPGKEY"
