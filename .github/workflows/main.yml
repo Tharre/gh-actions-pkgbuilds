@@ -20,7 +20,7 @@ jobs:
       - name: Prepare environment
         run: |
           pacman-key --init
-          pacman -Syu git expac devtools --noconfirm
+          pacman -Syu --noconfirm sudo git expac devtools
 
           cat << EOF >> /etc/makepkg.conf
           GPGKEY="$GPGKEY"
