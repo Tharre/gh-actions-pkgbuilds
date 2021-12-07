@@ -26,8 +26,6 @@ for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 			repo-add -s /repository/custom.db.tar.gz "$pkg"
 			gpg --detach-sign "$pkg"
 		done
-
-		mv *.pkg.tar* /repository/
 	fi
 	popd > /dev/null
 done
