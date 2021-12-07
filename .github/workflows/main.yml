@@ -47,6 +47,7 @@ jobs:
       - name: Download repository database
         run: |
           mkdir /repository
+          chown root:build /repository
           cd /repository
           curl -fL --remote-name-all "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/"{custom.db.tar.gz,custom.files.tar.gz} || repo-add custom.db.tar.gz
           ln -sf /repository/custom.db.tar.gz /repository/custom.db

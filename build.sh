@@ -1,7 +1,6 @@
 #!/bin/bash -e
 
 CHROOT=/buildchroot
-chmod 777 /repository
 
 for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 	pushd "$dir" > /dev/null
