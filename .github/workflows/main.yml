@@ -66,12 +66,6 @@ jobs:
         env:
           repo_key: ${{ secrets.REPO_KEY }}
 
-      - name: Create chroot
-        run: |
-          CHROOT=/buildchroot
-          mkdir $CHROOT
-          mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
-
       - name: Build Arch Linux Package(s)
         run: |
           chown -Rh build:build $GITHUB_WORKSPACE

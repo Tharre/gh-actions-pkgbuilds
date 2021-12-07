@@ -2,6 +2,11 @@
 
 CHROOT=/buildchroot
 
+if [ ! -d "$CHROOT" ]; then
+	mkdir $CHROOT
+	mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
+fi
+
 for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 	pushd "$dir" > /dev/null
 
