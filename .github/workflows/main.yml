@@ -25,6 +25,7 @@ jobs:
           cat << EOF >> /etc/makepkg.conf
           GPGKEY="$GPGKEY"
           PACKAGER="Github Actions <$GITHUB_SERVER_URL/$GITHUB_REPOSITORY>"
+          PKGDEST=/repository
           EOF
 
           useradd -m -G wheel -s /bin/bash build
