@@ -25,21 +25,8 @@ jobs:
           ln -sf /repository/custom.db.tar.gz /repository/custom.db
           ln -sf /repository/custom.files.tar.gz /repository/custom.files
 
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Prepare environment
         run: |
-          cat << EOF >> "$GITHUB_WORKSPACE/pacman.conf"
-          [custom]
-          SigLevel = Required DatabaseOptional
-          Server = file:///repository
-          Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo
-          EOF
-
-          mv "$GITHUB_WORKSPACE/pacman.conf" /etc/pacman.conf
-          mv "$GITHUB_WORKSPACE/aur-graph" /usr/bin/
-
           pacman-key --init
           pacman -Syu git expac devtools --noconfirm
 
@@ -52,11 +39,14 @@ jobs:
           mkdir -p /home/build/.gnupg
           echo "keyserver-options auto-key-retrieve" > /home/build/.gnupg/gpg.conf
           echo "keyserver hkps://keys.openpgp.org" >> /home/build/.gnupg/gpg.conf
-          chown -Rh build:build /home/build/.gnupg/
+          chown build:build /home/build/.gnupg/{,gpg.conf}
 
           dbus-uuidgen --ensure=/etc/machine-id
 
           sed -i "s/en_US de_DE/en_US/g" /usr/bin/mkarchroot
+
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Import GPG Key
         run: |
@@ -68,6 +58,16 @@ jobs:
 
       - name: Build Arch Linux Package(s)
         run: |
+          cat << EOF >> "$GITHUB_WORKSPACE/pacman.conf"
+          [custom]
+          SigLevel = Required DatabaseOptional
+          Server = file:///repository
+          Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo
+          EOF
+
+          mv "$GITHUB_WORKSPACE/pacman.conf" /etc/pacman.conf
+          mv "$GITHUB_WORKSPACE/aur-graph" /usr/bin/
+
           chown -Rh build:build $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
           ./build.sh
