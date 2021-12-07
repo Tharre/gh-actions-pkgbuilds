@@ -9,8 +9,7 @@ for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 	# first package in pkgname is up to date
 	remotever="$(expac -S1 "%v" "custom/$dir" || expac -S1 "%v" "custom/$(source PKGBUILD; printf %s "$pkgname")" || echo NONE)"
 
-	# TODO: there should be EPOCH in here somewhere
-	if [ $(vercmp "$remotever" $(source PKGBUILD; printf %s "$pkgver-$pkgrel")) -lt 0 ]; then
+	if [ $(vercmp "$remotever" $(source PKGBUILD; printf %s "${epoch:-0}:$pkgver-$pkgrel")) -lt 0 ]; then
 		echo "=== Creating build chroot ==="
 		if [ ! -d "$CHROOT" ]; then
 			mkdir $CHROOT
