@@ -40,14 +40,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Import GPG Key
-        run: |
-          printf "%s" "$repo_key" | gpg --import
-          printf "%s" "$repo_key" | pacman-key -a -
-          pacman-key --lsign-key "$GPGKEY"
-        env:
-          repo_key: ${{ secrets.REPO_KEY }}
-
       - name: Download repository database
         run: |
           mkdir /repository
@@ -55,6 +47,14 @@ jobs:
           curl -fL --remote-name-all "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/"{custom.db.tar.gz,custom.files.tar.gz} || repo-add custom.db.tar.gz
           ln -sf /repository/custom.db.tar.gz /repository/custom.db
           ln -sf /repository/custom.files.tar.gz /repository/custom.files
+
+      - name: Import GPG Key
+        run: |
+          printf "%s" "$repo_key" | gpg --import
+          printf "%s" "$repo_key" | pacman-key -a -
+          pacman-key --lsign-key "$GPGKEY"
+        env:
+          repo_key: ${{ secrets.REPO_KEY }}
 
       - name: Build Arch Linux Package(s)
         run: |
