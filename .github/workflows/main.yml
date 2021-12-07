@@ -17,14 +17,6 @@ jobs:
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup
     steps:
-      - name: Download repository database
-        run: |
-          mkdir /repository
-          cd /repository
-          curl -fL --remote-name-all "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/"{custom.db.tar.gz,custom.files.tar.gz} || repo-add custom.db.tar.gz
-          ln -sf /repository/custom.db.tar.gz /repository/custom.db
-          ln -sf /repository/custom.files.tar.gz /repository/custom.files
-
       - name: Prepare environment
         run: |
           pacman-key --init
@@ -56,6 +48,14 @@ jobs:
         env:
           repo_key: ${{ secrets.REPO_KEY }}
 
+      - name: Download repository database
+        run: |
+          mkdir /repository
+          cd /repository
+          curl -fL --remote-name-all "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/"{custom.db.tar.gz,custom.files.tar.gz} || repo-add custom.db.tar.gz
+          ln -sf /repository/custom.db.tar.gz /repository/custom.db
+          ln -sf /repository/custom.files.tar.gz /repository/custom.files
+
       - name: Build Arch Linux Package(s)
         run: |
           cat << EOF >> "$GITHUB_WORKSPACE/pacman.conf"
@@ -67,6 +67,8 @@ jobs:
 
           mv "$GITHUB_WORKSPACE/pacman.conf" /etc/pacman.conf
           mv "$GITHUB_WORKSPACE/aur-graph" /usr/bin/
+
+          pacman -Syu --noconfirm
 
           chown -Rh build:build $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
