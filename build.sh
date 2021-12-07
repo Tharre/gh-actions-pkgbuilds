@@ -22,7 +22,6 @@ for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 
 		sudo -u build SRCDEST=/tmp makepkg --packagelist | while IFS="" read -r pkg
 		do
-			printf '%s\n' "$pkg"
 			repo-add -s /repository/custom.db.tar.gz "$pkg"
 			gpg --detach-sign "$pkg"
 		done

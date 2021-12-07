@@ -30,7 +30,6 @@ jobs:
 
           useradd -m -G wheel -s /bin/bash build
           echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/00_wheel
-          #chown -Rh build:build /repository
 
           mkdir -p /home/build/.gnupg
           echo "keyserver-options auto-key-retrieve" > /home/build/.gnupg/gpg.conf
@@ -47,6 +46,8 @@ jobs:
       - name: Download repository database
         run: |
           mkdir /repository
+          # makepkg complains about directory permissions, even if it's only run
+          # with --packagelist
           chown build:root /repository
           cd /repository
           curl -fL --remote-name-all "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo/"{custom.db.tar.gz,custom.files.tar.gz} || repo-add custom.db.tar.gz
