@@ -2,11 +2,6 @@
 
 CHROOT=/buildchroot
 
-if [ ! -d "$CHROOT" ]; then
-	mkdir $CHROOT
-	mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
-fi
-
 for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 	pushd "$dir" > /dev/null
 
@@ -16,6 +11,12 @@ for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 
 	# TODO: there should be EPOCH in here somewhere
 	if [ $(vercmp "$remotever" $(source PKGBUILD; printf %s "$pkgver-$pkgrel")) -lt 0 ]; then
+		echo "=== Creating build chroot ==="
+		if [ ! -d "$CHROOT" ]; then
+			mkdir $CHROOT
+			mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
+		fi
+
 		echo "=== Building $dir ==="
 		makechrootpkg -c -u -U build -D /repository -r "$CHROOT"
 		repo-add -s /repository/custom.db.tar.gz *.pkg.tar*
