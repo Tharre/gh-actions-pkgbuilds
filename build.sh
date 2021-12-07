@@ -13,8 +13,8 @@ for dir in $(aur-graph */.SRCINFO | tsort | tac); do
 
 	if [ $(vercmp "$remotever" \
 	    $(source PKGBUILD; printf %s "${epoch:-0}:$pkgver-$pkgrel")) -lt 0 ]; then
-		echo "=== Creating build chroot ==="
 		if [ ! -d "$CHROOT" ]; then
+			echo "=== Creating build chroot ==="
 			mkdir $CHROOT
 			mkarchroot -C /etc/pacman.conf $CHROOT/root base-devel
 		fi

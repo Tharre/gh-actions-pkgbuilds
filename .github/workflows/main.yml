@@ -37,8 +37,7 @@ jobs:
           echo "keyserver hkps://keys.openpgp.org" >> /home/build/.gnupg/gpg.conf
           chown build:build /home/build/.gnupg/{,gpg.conf}
 
-          dbus-uuidgen --ensure=/etc/machine-id
-
+          # needed because these docker images don't have proper locale support
           sed -i "s/en_US de_DE/en_US/g" /usr/bin/mkarchroot
 
       - name: Checkout
@@ -57,15 +56,15 @@ jobs:
           ln -sf "/repository/$REPO_NAME.db.tar.gz" "/repository/$REPO_NAME.db"
           ln -sf "/repository/$REPO_NAME.files.tar.gz" "/repository/$REPO_NAME.files"
 
-          cat << EOF >> "$GITHUB_WORKSPACE/pacman.conf"
+          mv "$GITHUB_WORKSPACE/.github/workflow/pacman.conf" /etc/pacman.conf
+          mv "$GITHUB_WORKSPACE/.github/workflow/aur-graph" /usr/bin/
+
+          cat << EOF >> /etc/pacman.conf
           [$REPO_NAME]
           SigLevel = Required DatabaseOptional
           Server = file:///repository
           Server = $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/repo
           EOF
-
-          mv "$GITHUB_WORKSPACE/pacman.conf" /etc/pacman.conf
-          mv "$GITHUB_WORKSPACE/aur-graph" /usr/bin/
 
           pacman -Syu --noconfirm
 
