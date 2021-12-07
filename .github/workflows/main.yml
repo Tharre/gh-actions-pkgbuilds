@@ -41,6 +41,8 @@ jobs:
           # needed because these docker images don't have proper locale support
           sed -i "s/en_US de_DE/en_US/g" /usr/bin/mkarchroot
 
+          dbus-uuidgen --ensure=/etc/machine-id
+
       - name: Checkout
         uses: actions/checkout@v2
 
